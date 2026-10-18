@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#18245b">
+<title>MPI Kotak Misteri Vektor | Matematika Kelas X SMK</title>
+<style>
+:root{--navy:#18245b;--blue:#3156d3;--cyan:#35c6df;--gold:#ffd166;--pink:#ff6b9d;--green:#16875d;--red:#c7394d;--paper:#fff;--ink:#17213e}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:radial-gradient(circle at 15% 10%,#4c6fff 0,transparent 32%),linear-gradient(135deg,#101842,#263a83 60%,#17265f);color:white;min-height:100vh}
+header{padding:20px 16px 12px;text-align:center}
+.eyebrow{font-weight:800;letter-spacing:2px;color:#bdefff;font-size:.82rem}
+h1{margin:6px 0;font-size:clamp(1.65rem,4vw,3rem);line-height:1.08}
+.subtitle{margin:8px auto 0;max-width:760px;color:#e0e8ff}
+.wrap{max-width:1100px;margin:auto;padding:12px 16px 36px}
+.topbar{display:flex;gap:12px;flex-wrap:wrap;align-items:stretch;justify-content:center;margin:12px 0 18px}
+.stat{background:#ffffff18;border:1px solid #ffffff35;border-radius:16px;padding:12px 18px;min-width:145px;text-align:center;backdrop-filter:blur(6px)}
+.stat small{display:block;color:#d8e2ff;font-weight:700}.stat strong{font-size:1.45rem}
+.toolbar{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:12px 0 18px}
+button{font:inherit;font-weight:800;border:0;cursor:pointer;touch-action:manipulation;transition:transform .15s,filter .15s}
+button:hover{filter:brightness(1.06)}button:active{transform:scale(.97)}button:focus-visible{outline:4px solid var(--gold);outline-offset:3px}
+.btn{padding:12px 18px;border-radius:13px;min-height:48px;background:white;color:var(--navy);box-shadow:0 4px 0 #aab7e8}
+.btn.primary{background:var(--gold);color:#3c2b00;box-shadow:0 4px 0 #c89c32}
+.btn.ghost{background:#ffffff18;color:white;border:1px solid #ffffff55;box-shadow:none}
+.grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
+.box{min-height:112px;border-radius:18px;background:linear-gradient(145deg,#fff,#dce6ff);color:var(--navy);box-shadow:0 7px 0 #9aa9e6,0 12px 20px #0002;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;position:relative;overflow:hidden}
+.box .gift{font-size:2rem;line-height:1.1}.box .num{font-size:1.1rem}.box .label{font-size:.72rem;color:#56628f}
+.box::before{content:"";position:absolute;top:0;left:0;right:0;height:7px;background:linear-gradient(90deg,var(--cyan),var(--pink),var(--gold))}
+.box.opened{background:linear-gradient(145deg,#b7f7d8,#69d9a8);box-shadow:0 7px 0 #26986a;color:#06482e}
+.box.opened .gift{font-size:1.7rem}.box.opened .label{color:#07583a}
+.box:disabled{cursor:default;opacity:.96}
+@keyframes wobble{0%,100%{transform:rotate(0) scale(1)}25%{transform:rotate(-5deg) scale(1.06)}60%{transform:rotate(5deg) scale(1.06)}}
+.box.animate{animation:wobble .5s ease}
+.note{text-align:center;color:#dbe4ff;font-size:.94rem;margin:18px 0 8px}
+.panel{display:none;position:fixed;inset:0;background:#09112bd9;z-index:10;padding:18px;overflow:auto;align-items:center;justify-content:center}
+.panel.show{display:flex}
+.dialog{width:min(720px,100%);background:#fff;color:var(--ink);border-radius:24px;padding:clamp(18px,4vw,32px);box-shadow:0 25px 80px #0007;position:relative;animation:pop .25s ease}
+@keyframes pop{from{transform:translateY(18px) scale(.96);opacity:0}to{transform:none;opacity:1}}
+.dialog-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.pill{border-radius:99px;background:#e9edff;color:#3047a6;padding:7px 12px;font-weight:900;font-size:.82rem}
+.close{width:44px;height:44px;border-radius:12px;background:#eef1fa;color:#27345c;font-size:1.35rem}
+h2{font-size:clamp(1.35rem,3vw,2rem);margin:16px 0 10px}
+.question{font-size:clamp(1.08rem,2.4vw,1.35rem);line-height:1.5;font-weight:750}
+.answers{display:grid;gap:10px;margin:20px 0}
+.answer{width:100%;text-align:left;padding:15px 16px;min-height:56px;border:2px solid #dbe2f3;border-radius:14px;background:#f7f9ff;color:#1d2a51}
+.answer.correct{border-color:#16875d;background:#d9f8e8;color:#075b39}
+.answer.wrong{border-color:#c7394d;background:#ffe3e7;color:#8d1728}
+.feedback{min-height:48px;border-radius:12px;padding:12px;margin:12px 0;background:#f1f4fb;line-height:1.45}
+.feedback.good{background:#d9f8e8;color:#075b39}.feedback.bad{background:#ffe3e7;color:#8d1728}
+.dialog-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;margin-top:12px}
+.reward{text-align:center;padding:24px 8px}.reward .big{font-size:4rem}
+.result-list{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}
+.result-list span{padding:10px 12px;border-radius:12px;background:#eef1ff;font-weight:800}
+.footer{text-align:center;color:#bdcaff;font-size:.85rem;padding:22px 10px}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#fff;color:#17213e;border-radius:12px;padding:12px 18px;font-weight:800;box-shadow:0 8px 30px #0004;z-index:20;display:none}
+.toast.show{display:block}
+@media(max-width:800px){.grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.box{min-height:100px}}
+@media(max-width:480px){header{padding-top:18px}.grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.box{min-height:95px;border-radius:14px}.box .gift{font-size:1.7rem}.stat{min-width:calc(50% - 8px);flex:1}.toolbar .btn{flex:1}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">MULTIMEDIA PEMBELAJARAN INTERAKTIF • MATEMATIKA KELAS X SMK</div>
+  <h1>🎁 KOTAK MISTERI VEKTOR</h1>
+  <p class="subtitle">Buka kotak satu per satu, pecahkan tantangan, dan kumpulkan poin tentang Vektor dan Operasinya!</p>
+</header>
+<main class="wrap">
+  <section class="topbar" aria-label="Informasi skor">
+    <div class="stat"><small>SKOR</small><strong id="score">0</strong></div>
+    <div class="stat"><small>KOTAK SELESAI</small><strong><span id="done">0</span> / 23</strong></div>
+    <div class="stat"><small>JAWABAN BENAR</small><strong id="correctCount">0</strong></div>
+  </section>
+  <div class="toolbar">
+    <button class="btn ghost" id="soundBtn" aria-pressed="true">🔊 Suara: Aktif</button>
+    <button class="btn ghost" id="instructionsBtn">📘 Petunjuk</button>
+    <button class="btn primary" id="restartBtn">↻ Main Lagi</button>
+  </div>
+  <section class="grid" id="boxGrid" aria-label="23 kotak misteri"></section>
+  <p class="note">Pilih satu kotak untuk membuka misterinya. Kotak yang sudah diselesaikan akan berubah menjadi hijau.</p>
+  <div class="footer">SMKN 5 Kolaka Utara • Belajar Matematika dengan menyenangkan</div>
+</main>
+
+<div class="panel" id="gamePanel" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="dialog">
+    <div class="dialog-head"><span class="pill" id="boxPill">KOTAK 1</span><span class="pill" id="pointsPill">10 POIN</span><button class="close" id="closeBtn" aria-label="Tutup">×</button></div>
+    <h2 id="modalTitle">Tantangan Vektor</h2>
+    <div id="modalBody"></div>
+    <div class="dialog-actions" id="modalActions"></div>
+  </div>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+const challenges = [
+ {type:"quiz",points:10,q:"Apa yang membedakan besaran vektor dari besaran skalar?",a:["Vektor hanya memiliki nilai","Vektor memiliki besar dan arah","Vektor tidak memiliki satuan","Vektor selalu bernilai negatif"],correct:1,ex:"Vektor memiliki besar dan arah, sedangkan skalar hanya memiliki besar."},
+ {type:"quiz",points:10,q:"Manakah yang merupakan besaran vektor?",a:["Massa","Waktu","Perpindahan","Suhu"],correct:2,ex:"Perpindahan memiliki besar dan arah sehingga termasuk besaran vektor."},
+ {type:"quiz",points:10,q:"Manakah yang merupakan besaran skalar?",a:["Gaya","Kecepatan vektor","Perpindahan","Massa"],correct:3,ex:"Massa hanya memiliki besar dan tidak memiliki arah."},
+ {type:"quiz",points:10,q:"Vektor biasanya digambarkan menggunakan ....",a:["Garis tanpa ujung","Anak panah yang menunjukkan besar dan arah","Lingkaran saja","Titik tanpa keterangan"],correct:1,ex:"Panjang panah mewakili besar vektor, sedangkan arah panah menunjukkan arahnya."},
+ {type:"quiz",points:10,q:"Seorang siswa berjalan 5 meter ke timur. Jika timur dianggap sebagai arah positif, perpindahannya adalah ....",a:["+5 m","−5 m","0 m","+10 m"],correct:0,ex:"Arah timur ditetapkan positif, jadi perpindahannya +5 m."},
+ {type:"quiz",points:10,q:"Vektor 6 meter ke timur memiliki besar yang sama dengan vektor ....",a:["3 meter ke timur","6 meter ke barat","6 meter ke utara","12 meter ke barat"],correct:1,ex:"Besar keduanya sama-sama 6 meter, tetapi arahnya berlawanan."},
+ {type:"quiz",points:15,q:"Seseorang bergerak 3 meter ke timur, lalu 4 meter ke timur. Berapa perpindahan totalnya?",a:["1 m ke timur","7 m ke timur","12 m ke timur","7 m ke barat"],correct:1,ex:"Karena arahnya sama, besar perpindahan dijumlahkan: 3 + 4 = 7 m ke timur."},
+ {type:"quiz",points:15,q:"Diketahui A = +8 m dan B = +3 m pada satu garis lurus. Nilai A − B adalah ....",a:["+11 m","−11 m","+5 m","−5 m"],correct:2,ex:"A − B = (+8) − (+3) = +5 m."},
+ {type:"quiz",points:15,q:"Siswa berjalan 9 meter ke timur lalu 4 meter ke barat. Perpindahan akhirnya adalah ....",a:["13 m ke timur","5 m ke timur","5 m ke barat","36 m ke timur"],correct:1,ex:"Ambil timur positif: +9 − 4 = +5 m, artinya 5 m ke timur."},
+ {type:"quiz",points:10,q:"Jika sebuah vektor dijumlahkan dengan vektor lawannya, hasilnya adalah ....",a:["Vektor satuan","Vektor nol","Dua kali vektor","Tidak terdefinisi"],correct:1,ex:"Vektor dan lawannya memiliki besar sama serta arah berlawanan, sehingga resultannya nol."},
+ {type:"bonus",points:20,title:"Bonus Kejutan!",message:"Kamu menemukan kotak bonus! Skor bertambah 20 poin.",icon:"🎉"},
+ {type:"quiz",points:15,q:"Jika A = 3 satuan ke timur, maka 2A adalah ....",a:["6 satuan ke timur","5 satuan ke timur","6 satuan ke barat","1,5 satuan ke timur"],correct:0,ex:"Perkalian vektor dengan skalar positif memperbesar panjangnya tanpa mengubah arah: 2 × 3 = 6."},
+ {type:"quiz",points:15,q:"Diketahui vektor A = (3, 4). Berapa komponen x dari vektor A?",a:["3","4","7","12"],correct:0,ex:"Dalam pasangan berurutan (x, y), komponen pertama adalah komponen x."},
+ {type:"quiz",points:15,q:"Diketahui A = (2, 3) dan B = (4, 1). Hasil A + B adalah ....",a:["(6, 4)","(2, 2)","(8, 3)","(4, 6)"],correct:0,ex:"Jumlahkan komponen yang bersesuaian: (2 + 4, 3 + 1) = (6, 4)."},
+ {type:"quiz",points:15,q:"Diketahui A = (5, 7) dan B = (2, 3). Hasil A − B adalah ....",a:["(7, 10)","(3, 4)","(3, 10)","(−3, −4)"],correct:1,ex:"Kurangkan komponen yang bersesuaian: (5 − 2, 7 − 3) = (3, 4)."},
+ {type:"quiz",points:20,q:"Tantangan cepat: seorang siswa bergerak 6 meter ke utara, kemudian 6 meter ke selatan. Berapa perpindahan akhirnya?",a:["0 meter","6 meter ke utara","12 meter ke selatan","12 meter ke utara"],correct:0,ex:"Perpindahan 6 m ke utara dan 6 m ke selatan saling meniadakan. Resultannya 0 m.",timed:true},
+ {type:"quiz",points:10,q:"Pernyataan yang benar adalah ....",a:["Skalar memiliki besar dan arah","Vektor hanya memiliki arah","Vektor memiliki besar dan arah","Skalar selalu bernilai negatif"],correct:2,ex:"Besaran vektor ditentukan oleh besar dan arah."},
+ {type:"quiz",points:15,q:"Jika arah utara dianggap positif, vektor 7 meter ke selatan ditulis ....",a:["+7 m","−7 m","0 m","+14 m"],correct:1,ex:"Selatan berlawanan dengan arah positif utara, sehingga ditulis −7 m."},
+ {type:"bonus",points:15,title:"Bonus Bintang!",message:"Kejutan! Tambahan 15 poin untukmu.",icon:"⭐"},
+ {type:"quiz",points:20,q:"Seseorang berjalan 3 meter ke timur lalu 4 meter ke utara. Berapa besar perpindahan lurus dari titik awal ke titik akhir?",a:["1 m","5 m","7 m","12 m"],correct:1,ex:"Gunakan Pythagoras: √(3² + 4²) = √25 = 5 m."},
+ {type:"quiz",points:15,q:"Pernyataan: Dua vektor dengan besar sama pasti memiliki arah sama.",a:["Benar","Salah"],correct:1,ex:"Salah. Dua vektor dapat memiliki besar sama tetapi arah berbeda, misalnya 5 m ke timur dan 5 m ke barat."},
+ {type:"quiz",points:20,q:"Sebuah kendaraan bergerak 10 meter ke timur, kemudian 6 meter ke barat. Tentukan perpindahan akhirnya.",a:["16 m ke timur","4 m ke timur","4 m ke barat","60 m ke timur"],correct:1,ex:"Ambil timur positif: +10 − 6 = +4 m, jadi 4 meter ke timur."},
+ {type:"bonus",points:25,title:"Jackpot Vektor!",message:"Luar biasa! Kamu berhasil menemukan jackpot vektor. Skor bertambah 25 poin!",icon:"🏆"}
+];
+let score=0, done=new Set(), correctCount=0, wrongCount=0, soundOn=true, currentIndex=null, answered=false, timerId=null, timeLeft=15;
+const $=id=>document.getElementById(id);
+function sound(freq=600,duration=.09){if(!soundOn)return;try{const C=window.AudioContext||window.webkitAudioContext;if(!C)return;const ctx=new C(),o=ctx.createOscillator(),g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.frequency.value=freq;o.type="sine";g.gain.setValueAtTime(.07,ctx.currentTime);g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+duration);o.start();o.stop(ctx.currentTime+duration);o.onended=()=>ctx.close()}catch(e){}}
+function shuffleChallenges(){// Acak isi kotak saat sesi baru
+ const pool=challenges.slice();for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]]}return pool;
+}
+let session=shuffleChallenges();
+function renderGrid(){
+ const grid=$("boxGrid");grid.innerHTML="";
+ session.forEach((item,i)=>{const b=document.createElement("button");b.className="box"+(done.has(i)?" opened":"");b.disabled=done.has(i);b.setAttribute("aria-label",`Kotak misteri ${i+1}${done.has(i)?", selesai":""}`);b.innerHTML=`<span class="gift">${done.has(i)?"✓":"🎁"}</span><span class="num">${i+1}</span><span class="label">${done.has(i)?"SELESAI":"KLIK UNTUK BUKA"}</span>`;b.addEventListener("click",()=>openBox(i,b));grid.appendChild(b)});
+ $("score").textContent=score;$("done").textContent=done.size;$("correctCount").textContent=correctCount;
+}
+function openBox(i,button){if(done.has(i))return;currentIndex=i;answered=false;timeLeft=15;button.classList.add("animate");sound(450,.12);setTimeout(()=>{const item=session[i];$("boxPill").textContent=`KOTAK ${i+1}`;$("pointsPill").textContent=`${item.points} POIN`;$("modalTitle").textContent=item.type==="bonus"?item.title:"Tantangan Vektor";$("modalBody").innerHTML="";$("modalActions").innerHTML="";$("gamePanel").classList.add("show");if(item.type==="bonus")showBonus(item);else showQuestion(item)},180)}
+function showBonus(item){$("modalBody").innerHTML=`<div class="reward"><div class="big">${item.icon}</div><h2>${item.title}</h2><p class="question">${item.message}</p><p>+${item.points} poin</p></div>`;score+=item.points;done.add(currentIndex);sound(850,.22);updateStats();const btn=document.createElement("button");btn.className="btn primary";btn.textContent="Kembali ke Kotak";btn.onclick=()=>closePanel();$("modalActions").appendChild(btn);confetti()}
+function showQuestion(item){
+ const body=$("modalBody");body.innerHTML=`<div class="question">${item.q}</div>${item.timed?'<div class="feedback" id="timer">⏱️ Waktu: 15 detik</div>':""}<div class="answers" id="answers"></div><div class="feedback" id="feedback" aria-live="polite">Pilih jawaban yang menurutmu benar.</div>`;
+ const answers=$("answers");item.a.forEach((a,index)=>{const b=document.createElement("button");b.className="answer";b.textContent=String.fromCharCode(65+index)+". "+a;b.onclick=()=>checkAnswer(index,item,b);answers.appendChild(b)});
+ const close=document.createElement("button");close.className="btn";close.textContent="Tutup Tantangan";close.onclick=()=>closePanel();$("modalActions").appendChild(close);
+ if(item.timed){timerId=setInterval(()=>{timeLeft--;$("timer").textContent=`⏱️ Waktu: ${timeLeft} detik`;if(timeLeft<=0){clearInterval(timerId);if(!answered){answered=true;wrongCount++;showFeedback(false,"Waktu habis! Jawaban yang benar: "+item.a[item.correct]+". "+item.ex);finishQuestion(item,false)}}},1000)}
+}
+function checkAnswer(index,item,button){if(answered)return;const all=[...document.querySelectorAll(".answer")];if(index===item.correct){answered=true;all[item.correct].classList.add("correct");correctCount++;score+=item.points;sound(780,.15);showFeedback(true,`Benar! +${item.points} poin. ${item.ex}`);finishQuestion(item,true)}else{button.classList.add("wrong");sound(220,.14);const fb=$("feedback");fb.className="feedback bad";fb.textContent="Belum tepat. Coba sekali lagi!";button.disabled=true;wrongCount++;}}
+function showFeedback(good,msg){const fb=$("feedback");if(fb){fb.className="feedback "+(good?"good":"bad");fb.textContent=msg}}
+function finishQuestion(item,good){if(timerId){clearInterval(timerId);timerId=null}answered=true;done.add(currentIndex);document.querySelectorAll(".answer").forEach(b=>b.disabled=true);updateStats();const close=[...$("modalActions").querySelectorAll("button")][0];if(close)close.textContent="Kembali ke Kotak";if(done.size===23)setTimeout(showFinal,450)}
+function updateStats(){ $("score").textContent=score;$("done").textContent=done.size;$("correctCount").textContent=correctCount;renderGrid()}
+function closePanel(){if(timerId){clearInterval(timerId);timerId=null}$("gamePanel").classList.remove("show");if(done.size===23)setTimeout(showFinal,250)}
+function showFinal(){if(done.size!==23)return;$("boxPill").textContent="PERMAINAN SELESAI";$("pointsPill").textContent=`SKOR ${score}`;$("modalTitle").textContent="Hebat! Semua kotak telah dibuka";$("modalBody").innerHTML=`<div class="reward"><div class="big">🏆</div><p class="question">Terima kasih telah belajar Vektor dan Operasinya. Terus semangat belajar Matematika!</p><div class="result-list"><span>⭐ Skor: ${score}</span><span>✅ Benar: ${correctCount}</span><span>📦 Kotak: 23/23</span></div><p>${score>=250?"Luar biasa! Pemahaman vektormu hebat!":score>=150?"Kerja bagus! Terus berlatih agar makin mahir.":"Terus berlatih. Setiap tantangan adalah kesempatan untuk belajar!"}</p></div>`;$("modalActions").innerHTML="";const btn=document.createElement("button");btn.className="btn primary";btn.textContent="↻ Main Lagi";btn.onclick=restart;$("modalActions").appendChild(btn);$("gamePanel").classList.add("show");confetti()}
+function restart(){if(timerId){clearInterval(timerId);timerId=null}score=0;done=new Set();correctCount=0;wrongCount=0;currentIndex=null;answered=false;session=shuffleChallenges();$("gamePanel").classList.remove("show");renderGrid();sound(520,.1);toast("Permainan baru dimulai. Semangat!")}
+function toast(msg){const t=$("toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2200)}
+function confetti(){if(window.matchMedia("(prefers-reduced-motion: reduce)").matches)return;for(let i=0;i<22;i++){const s=document.createElement("span");s.textContent=["✨","⭐","🎉","💫"][i%4];s.style.cssText=`position:fixed;z-index:30;left:${Math.random()*100}%;top:${Math.random()*75}%;font-size:${18+Math.random()*18}px;pointer-events:none;animation:pop .8s ease forwards`;document.body.appendChild(s);setTimeout(()=>s.remove(),900)}}
+$("closeBtn").onclick=closePanel;$("restartBtn").onclick=()=>{if(confirm("Mulai ulang permainan? Skor dan kemajuan saat ini akan dihapus."))restart()};
+$("soundBtn").onclick=()=>{soundOn=!soundOn;$("soundBtn").textContent=soundOn?"🔊 Suara: Aktif":"🔇 Suara: Mati";$("soundBtn").setAttribute("aria-pressed",String(soundOn));if(soundOn)sound(650,.1)};
+$("instructionsBtn").onclick=()=>{$("boxPill").textContent="PETUNJUK";$("pointsPill").textContent="23 KOTAK";$("modalTitle").textContent="Cara Bermain";$("modalBody").innerHTML='<ol style="font-size:1.08rem;line-height:1.8;padding-left:24px"><li>Pilih satu kotak misteri bernomor 1–23.</li><li>Baca soal dan pilih jawaban yang paling tepat.</li><li>Jawaban benar memperoleh poin sesuai nilai kotak.</li><li>Kotak bonus menambah poin secara otomatis.</li><li>Setiap kotak hanya dapat diselesaikan satu kali.</li><li>Selesaikan semua kotak untuk melihat hasil akhir.</li></ol><p><strong>Tip:</strong> Diskusikan alasan jawaban bersama kelompokmu!</p>';$("modalActions").innerHTML="";const b=document.createElement("button");b.className="btn primary";b.textContent="Mulai Bermain";b.onclick=closePanel;$("modalActions").appendChild(b);$("gamePanel").classList.add("show")};
+$("gamePanel").addEventListener("click",e=>{if(e.target===$("gamePanel"))closePanel()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&$("gamePanel").classList.contains("show"))closePanel()});
+renderGrid();
+</script>
+</body>
+</html>
